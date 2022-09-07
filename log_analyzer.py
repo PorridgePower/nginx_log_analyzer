@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from os import listdir, path
+import time
+import re
 
 # log_format ui_short '$remote_addr  $remote_user $http_x_real_ip [$time_local] "$request" '
 #                     '$status $body_bytes_sent "$http_referer" '
@@ -12,6 +15,21 @@ config = {
     "REPORT_DIR": "./reports",
     "LOG_DIR": "./log"
 }
+
+
+def get_latest_log(logdir):
+    latest_date = 0
+    filename = None
+    ext = None
+    for f in listdir(logdir):
+        s = re.search("(nginx-access-ui\.log-([\d]{8})\.(log|gz))", f)
+        day_str = s.group(2)
+        filename = s.group(1)
+        ext = s.group(3)
+        day = time.strptime(day_str, "%Y%m%d")
+        if day > latest_date:
+            latest_date = day
+    return path.join(logdir, filename)
 
 
 def main():
