@@ -29,7 +29,18 @@ def get_latest_log(logdir):
         day = time.strptime(day_str, "%Y%m%d")
         if day > latest_date:
             latest_date = day
-    return path.join(logdir, filename)
+    return {
+        "logfile": path.join(logdir, filename),
+        "extention": ext,
+        "date": latest_date
+    }
+
+
+def open_log(logfile, extention):
+    opener = gzip.open if extention == 'gz' else open
+
+    with opener(logfile, "rb") as log:
+        pass
 
 
 def main():
