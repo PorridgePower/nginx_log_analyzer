@@ -41,7 +41,8 @@ def open_log(logfile, extention):
     opener = gzip.open if extention == 'gz' else open
 
     with opener(logfile, "rb") as log:
-        pass
+        for record in log:
+            yield record.decode('utf-8')
 
 
 def main():
