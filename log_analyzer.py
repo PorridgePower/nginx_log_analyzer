@@ -3,6 +3,7 @@
 
 import gzip
 from os import listdir, path
+from collections import namedtuple
 import time
 import re
 
@@ -11,11 +12,8 @@ import re
 #                     '"$http_user_agent" "$http_x_forwarded_for" "$http_X_REQUEST_ID" "$http_X_RB_USER" '
 #                     '$request_time';
 
-config = {
-    "REPORT_SIZE": 1000,
-    "REPORT_DIR": "./reports",
-    "LOG_DIR": "./log"
-}
+config = {"REPORT_SIZE": 1000, "REPORT_DIR": "./reports", "LOG_DIR": "./log"}
+LogInfo = namedtuple("Logfile", ["logfile", "extention", "date"])
 
 
 def get_latest_log(logdir):
@@ -32,11 +30,7 @@ def get_latest_log(logdir):
         day = time.strptime(day_str, "%Y%m%d")
         if day > latest_date:
             latest_date = day
-    return {
-        "logfile": path.join(logdir, filename),
-        "extention": ext,
-        "date": latest_date
-    }
+    return LogInfo(path.join(logdir, filename), ext, latest_date)
 
 
 def open_log(logfile, extention):
