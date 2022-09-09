@@ -24,6 +24,8 @@ def get_latest_log(logdir):
     ext = None
     for f in listdir(logdir):
         s = re.search("(nginx-access-ui\.log-([\d]{8})\.(log|gz))", f)
+        if s is None:
+            continue
         day_str = s.group(2)
         filename = s.group(1)
         ext = s.group(3)
