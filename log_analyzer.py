@@ -25,6 +25,14 @@ LogInfo = namedtuple("Logfile", ["logfile", "extention", "date"])
 
 
 def get_latest_log(logdir):
+    """Gets path for latest Nginx logfile (by date in filename)
+
+    Args:
+        logdir (str): Path for log search
+
+    Returns:
+        LogInfo: Named tuple (path, extention, date) of latest log
+    """
     latest_date = 0
     filename = None
     ext = None
@@ -42,6 +50,15 @@ def get_latest_log(logdir):
 
 
 def parse_log(logfile, extention):
+    """Opens logfile and generates parsed data
+
+    Args:
+        logfile (str): Path to logfile
+        extention (str): Type of log file - "gz" or "log"
+
+    Yields:
+        str: Data parsed frol log line
+    """
     opener = gzip.open if extention == 'gz' else open
     with opener(logfile, "rb") as log:
         for line in log:
@@ -49,6 +66,14 @@ def parse_log(logfile, extention):
 
 
 def parse_record(record):
+    """Extract data fields (request URL and time) from log line
+
+    Args:
+        record (str): Log line
+
+    Returns:
+        tuple: Request URL, estimated time
+    """
     expression = re.compile(LOG_RECORD_PATTERN)
     parse_result = expression.search(record)
     print(record)
