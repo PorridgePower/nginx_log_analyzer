@@ -33,11 +33,11 @@ def get_latest_log(logdir):
         if s is None:
             continue
         day_str = s.group(2)
-        filename = s.group(1)
-        ext = s.group(3)
         day = time.strptime(day_str, "%Y%m%d")
         if day > latest_date:
             latest_date = day
+            filename = s.group(1)
+            ext = s.group(3)
     return LogInfo(path.join(logdir, filename), ext, latest_date)
 
 
