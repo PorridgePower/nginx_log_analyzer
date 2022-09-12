@@ -38,7 +38,10 @@ def init_configuration(default_conf, specified_conf):
     """
     if path.exists(specified_conf):
         config_parser = configparser.ConfigParser(allow_no_value=True)
-        config_parser.read(specified_conf)
+        try:
+            config_parser.read(specified_conf)
+        except configparser.Error:
+            return default_conf
         merged_conf = {}
         for k in default_conf.keys():
             merged_conf[k] = config_parser.get("PARAMS",
