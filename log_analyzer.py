@@ -22,7 +22,7 @@ LOG_RECORD_PATTERN = (
     r'"(?P<http_X_REQUEST_ID>[\S]+)" "(?P<http_X_RB_USER>[\S]+)" (?P<request_time>[\d\.]+)'
 )
 
-CONFIG = {"REPORT_SIZE": 1000, "REPORT_DIR": "./reports", "LOG_DIR": "./log"}
+CONFIG = {"REPORT_SIZE": "1000", "REPORT_DIR": "./reports", "LOG_DIR": "./log"}
 LogInfo = namedtuple("Logfile", ["logfile", "extention", "date"])
 
 
