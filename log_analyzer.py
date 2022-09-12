@@ -4,7 +4,7 @@
 import gzip
 from os import listdir, path
 from collections import namedtuple
-from urlparse import urlparse
+from urllib.parse import urlparse
 import time
 import re
 
