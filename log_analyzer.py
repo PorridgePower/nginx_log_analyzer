@@ -7,6 +7,8 @@ from collections import namedtuple
 from urllib.parse import urlparse
 import time
 import re
+import argparse
+import configparser
 
 # log_format ui_short '$remote_addr  $remote_user $http_x_real_ip [$time_local] "$request" '
 #                     '$status $body_bytes_sent "$http_referer" '
@@ -20,8 +22,31 @@ LOG_RECORD_PATTERN = (
     r'"(?P<http_X_REQUEST_ID>[\S]+)" "(?P<http_X_RB_USER>[\S]+)" (?P<request_time>[\d\.]+)'
 )
 
-config = {"REPORT_SIZE": 1000, "REPORT_DIR": "./reports", "LOG_DIR": "./log"}
+CONFIG = {"REPORT_SIZE": 1000, "REPORT_DIR": "./reports", "LOG_DIR": "./log"}
 LogInfo = namedtuple("Logfile", ["logfile", "extention", "date"])
+
+
+def init_configuration(default_conf, specified_conf):
+    """Reads and merges configurations
+
+    Args:
+        default_conf (dict): Dafault configuration
+        specified_conf (str): User specified path to .conf file 
+
+    Returns:
+        _type_: _description_
+    """
+    if path.exists(specified_conf):
+        config_parser = configparser.ConfigParser(allow_no_value=True)
+        config_parser.read(specified_conf)
+        merged_conf = {}
+        for k in default_conf.keys():
+            merged_conf[k] = config_parser.get("PARAMS",
+                                               k,
+                                               fallback=default_conf[k])
+        return merged_conf
+    else:
+        return default_conf
 
 
 def get_latest_log(logdir):
