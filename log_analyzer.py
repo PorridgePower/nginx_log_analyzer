@@ -111,7 +111,18 @@ def parse_record(record):
 
 
 def main():
-    pass
+    parser = argparse.ArgumentParser(
+        description="Analyses Nginx log for most requested URLs and generate report")
+    parser.add_argument('--conf',
+                        metavar='conf_file',
+                        type=str,
+                        default="default.conf",
+                        help='Configuration file',
+                        required=False)
+
+    args = parser.parse_args()
+    current_conf = init_configuration(
+        default_conf=CONFIG, specified_conf=args.conf)
 
 if __name__ == "__main__":
     main()
