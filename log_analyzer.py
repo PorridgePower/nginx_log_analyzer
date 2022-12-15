@@ -234,6 +234,9 @@ def main():
                         required=False)
 
     args = parser.parse_args()
+
+    current_conf = init_configuration(
+        default_conf=CONFIG, specified_conf=args.conf)
     process(current_conf)
 
 
