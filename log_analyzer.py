@@ -10,6 +10,7 @@ import re
 import argparse
 import configparser
 from decimal import Decimal
+from string import Template
 import statistics
 
 # log_format ui_short '$remote_addr  $remote_user $http_x_real_ip [$time_local] "$request" '
@@ -115,6 +116,30 @@ def parse_record(record):
         return (request_path, request_time)
 
 
+def process(configuration):
+    """Processes configurations and starts parising
+
+    Args:
+        configuration (dict): Merged configuration
+    """
+    if not path.exists(configuration["LOG_DIR"]):
+        return 1
+    if not path.exists(configuration["REPORT_DIR"]):
+        return 1
+    logfile = get_latest_log(configuration["LOG_DIR"])
+    reportname = path.join(
+        configuration["REPORT_DIR"],
+        "report-%s.html" % time.strftime("%Y.%m.%d", logfile.date),
+    )
+    try:
+        size = int(configuration["REPORT_SIZE"])
+    except ValueError:
+        print("log error here")
+        return
+    data = generate_statistics(logfile)
+    sorted_data = sorted(data, key=lambda d: int(d["count"]), reverse=True)
+    render_report(sorted_data, reportname, size)
+
 
 def generate_statistics(log):
     """Calculates stat and generates result table
@@ -177,6 +202,24 @@ def select_times(log):
     return time_stat
 
 
+def render_report(url_data, report_fname, report_size):
+    """Insert table to report temlate
+
+    Args:
+        url_data (list): Data to render
+        report_fname (str): Path to report file
+        report_size (int): Count of lines of table to render
+    """
+    temp = open("report.html", "r")
+    s = Template(temp.read())
+    res = s.safe_substitute(table_json=url_data[:report_size])
+    report = open(report_fname, "wb")
+    report.write(res.encode("utf-8"))
+    temp.close()
+    report.close()
+    return
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Analyses Nginx log for most requested URLs and generate report")
@@ -188,8 +231,8 @@ def main():
                         required=False)
 
     args = parser.parse_args()
-    current_conf = init_configuration(
-        default_conf=CONFIG, specified_conf=args.conf)
+    process(current_conf)
+
 
 if __name__ == "__main__":
     main()
