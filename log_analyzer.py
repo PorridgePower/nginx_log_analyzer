@@ -63,7 +63,8 @@ def get_latest_log(logdir):
     Returns:
         LogInfo: Named tuple (path, extention, date) of latest log
     """
-    latest_date = 0
+    # TODO check if dir is empty
+    latest_date = time.gmtime(0)
     filename = None
     ext = None
     for f in listdir(logdir):
