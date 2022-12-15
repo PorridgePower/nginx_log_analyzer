@@ -107,11 +107,13 @@ def parse_record(record):
     """
     expression = re.compile(LOG_RECORD_PATTERN)
     parse_result = expression.search(record)
-    print(record)
     if parse_result is None:
-        return (None, ) * 2
+        return (None,) * 2
     else:
+        try:
         request_path = urlparse(parse_result.group("request").split()[1]).path
+        except:
+            return (None,) * 2
         request_time = parse_result.group("request_time")
         return (request_path, request_time)
 
