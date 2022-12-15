@@ -9,6 +9,8 @@ import time
 import re
 import argparse
 import configparser
+from decimal import Decimal
+import statistics
 
 # log_format ui_short '$remote_addr  $remote_user $http_x_real_ip [$time_local] "$request" '
 #                     '$status $body_bytes_sent "$http_referer" '
@@ -111,6 +113,68 @@ def parse_record(record):
         request_path = urlparse(parse_result.group("request").split()[1]).path
         request_time = parse_result.group("request_time")
         return (request_path, request_time)
+
+
+
+def generate_statistics(log):
+    """Calculates stat and generates result table
+
+    Args:
+        log (str): Path to logfile
+
+    Returns:
+        list: Result table
+    """
+    total_requests = 0
+    total_time = 0
+    table = []
+    for url, times in select_times(log).items():
+        url_time = Decimal(sum(times))
+        url_count = len(times)
+        time_avg = Decimal(url_time / len(times))
+        time_max = max(times)
+        time_med = statistics.median(times)
+        table.append(
+            {
+                "url": url,
+                "count": url_count,
+                "time_sum": url_time,
+                "time_avg": time_avg.to_eng_string(),
+                "time_max": time_max.to_eng_string(),
+                "time_med": time_med.to_eng_string(),
+            }
+        )
+        total_requests += url_count
+        total_time += url_time
+
+    for url_data in table:
+        url_data["count_perc"] = str(url_data["count"] / total_requests)
+        url_data["time_perc"] = str(url_data["time_sum"] / total_time)
+        url_data["time_sum"] = url_data["time_sum"].to_eng_string()
+
+    return table
+
+
+def select_times(log):
+    """Accumulates all request times for each url in log
+
+    Args:
+        log (str): Path to logfile
+
+    Returns:
+        list: Urls with request times
+    """
+    errors = 0
+    time_stat = {}
+    for url, req_time in parse_log(log.logfile, log.extention):
+        if url is None:
+            errors += 1
+            print("Do some job there")
+            continue
+        if not url in time_stat.keys():
+            time_stat[url] = []
+        time_stat[url].append(Decimal(req_time))
+    return time_stat
 
 
 def main():
