@@ -112,7 +112,7 @@ def parse_record(record):
         return (None,) * 2
     else:
         try:
-        request_path = urlparse(parse_result.group("request").split()[1]).path
+            request_path = urlparse(parse_result.group("request").split()[1]).path
         except:
             return (None,) * 2
         request_time = parse_result.group("request_time")
