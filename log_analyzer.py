@@ -213,7 +213,7 @@ def render_report(url_data, report_fname, report_size):
         report_fname (str): Path to report file
         report_size (int): Count of lines of table to render
     """
-    temp = open(path.realpath(__file__) + "/templates/report.html", "r")
+    temp = open(path.dirname(path.realpath(__file__)) + "/templates/report.html", "r")
     s = Template(temp.read())
     res = s.safe_substitute(table_json=url_data[:report_size])
     report = open(report_fname, "wb")
