@@ -47,3 +47,4 @@ settings.json
 # Logs and reports
 reports/
 log/
+*.log
