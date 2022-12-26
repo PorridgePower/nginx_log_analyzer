@@ -140,7 +140,7 @@ def process(configuration):
         print("log error here")
         return
     data = generate_statistics(logfile)
-    sorted_data = sorted(data, key=lambda d: int(d["time_sum"]), reverse=True)
+    sorted_data = sorted(data, key=lambda d: float(d["time_sum"]), reverse=True)
     render_report(sorted_data, reportname, size)
 
 
