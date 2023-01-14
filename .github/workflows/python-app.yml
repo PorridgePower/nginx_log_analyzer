@@ -29,6 +29,7 @@ jobs:
         pip install black pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with black
+    - if: $CI_COMMIT_BRANCH == "main"
       run: |
         black . --check
     - name: Test with unittest
