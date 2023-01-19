@@ -271,7 +271,7 @@ def main():
         "--conf",
         metavar="conf_file",
         type=str,
-        default="default.conf",
+        default="",
         help="Configuration file",
         required=False,
     )
