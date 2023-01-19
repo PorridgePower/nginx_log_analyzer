@@ -18,6 +18,9 @@ class TestLatestLogSearch(unittest.TestCase):
             ),
         )
 
+    def test_empty_dir(self):
+        self.assertEqual(get_latest_log(path.join(self.testdir, "empty")), None)
+
 
 if __name__ == "__main__":
     unittest.main()
