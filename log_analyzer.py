@@ -43,7 +43,7 @@ def init_configuration(default_conf, specified_conf):
         specified_conf (str): User specified path to .conf file
 
     Returns:
-        _type_: _description_
+        dict: Result configuration
     """
     if path.exists(specified_conf):
         config_parser = configparser.ConfigParser(allow_no_value=True)
@@ -209,7 +209,7 @@ def select_times(log):
         log (str): Path to logfile
 
     Returns:
-        list: Urls with request times
+        dict: Urls with request times
     """
     errors = 0
     time_stat = {}
