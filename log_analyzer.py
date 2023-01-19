@@ -67,9 +67,8 @@ def get_latest_log(logdir):
         logdir (str): Path for log search
 
     Returns:
-        LogInfo: Named tuple (path, extention, date) of latest log
+        LogInfo: Named tuple (path, extention, date) of latest log or None
     """
-    # TODO check if dir is empty
     latest_date = time.gmtime(0)
     filename = None
     ext = None
@@ -83,7 +82,7 @@ def get_latest_log(logdir):
             latest_date = day
             filename = s.group(1)
             ext = s.group(3)
-    return LogInfo(path.join(logdir, filename), ext, latest_date)
+    return LogInfo(path.join(logdir, filename), ext, latest_date) if filename else None
 
 
 def parse_log(logfile, extention):
@@ -109,7 +108,7 @@ def parse_record(record):
         record (str): Log line
 
     Returns:
-        tuple: Request URL, estimated time
+        tuple: Request URL, estimated time or (None,None)
     """
     expression = re.compile(LOG_RECORD_PATTERN)
     parse_result = expression.search(record)
