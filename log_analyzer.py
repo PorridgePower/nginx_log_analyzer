@@ -246,11 +246,11 @@ def render_report(url_data, report_fname, report_size):
         logging.error(f"File {template_fname} not found.  Aborting")
         return
     try:
-        with open(template_fname, "r") as template:
+        with open(template_fname, "r", encoding="utf-8") as template:
             s = Template(template.read())
-            res = s.substitute(table_json=url_data[:report_size])
-            with open(report_fname, "wb") as report:
-                report.write(res.encode("utf-8"))
+            res = s.safe_substitute(table_json=url_data[:report_size])
+            with open(report_fname, "w", encoding="utf-8") as report:
+                report.write(res)
     except IOError:
         logging.exception(
             "Error while preparing report", exc_info=True, stack_info=True
