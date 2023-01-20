@@ -206,20 +206,28 @@ def select_times(log):
     """Accumulates all request times for each url in log
 
     Args:
-        log (str): Path to logfile
+        log (LogInfo): Named tuple (path, extention, date) of latest log
 
     Returns:
         dict: Urls with request times
     """
+    # TODO: Use 'total' for statistics calculations
     errors = 0
+    total = 0
     time_stat = {}
     for url, req_time in parse_log(log.logfile, log.extention):
+        total += 1
         if url is None:
             errors += 1
             continue
         if not url in time_stat.keys():
             time_stat[url] = []
         time_stat[url].append(Decimal(req_time))
+
+        if errors > 0.7 * total:
+            logging.error("Parsing errors limit exeeded")
+            return {}
+
     return time_stat
 
 
