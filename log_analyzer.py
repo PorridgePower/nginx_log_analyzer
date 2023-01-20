@@ -206,7 +206,7 @@ def select_times(log):
     """Accumulates all request times for each url in log
 
     Args:
-        log (str): Path to logfile
+        log (LogInfo): Named tuple (path, extention, date) of latest log
 
     Returns:
         dict: Urls with request times
