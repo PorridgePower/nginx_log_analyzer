@@ -6,8 +6,7 @@ from log_analyzer import select_times, generate_statistics, LogInfo
 
 
 class TestCalculations(unittest.TestCase):
-    def setUp(self):
-        self.testdir = path.join(path.dirname(path.abspath(__file__)), "testdir")
+    testdir = path.join(path.dirname(path.abspath(__file__)), "testdir")
 
     def test_hreshold_limit(self):
         self.assertEqual(

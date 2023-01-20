@@ -5,8 +5,7 @@ from log_analyzer import get_latest_log, LogInfo
 
 
 class TestLatestLogSearch(unittest.TestCase):
-    def setUp(self):
-        self.testdir = path.join(path.dirname(path.abspath(__file__)), "testdir")
+    testdir = path.join(path.dirname(path.abspath(__file__)), "testdir")
 
     def test_valid_name(self):
         self.assertEqual(

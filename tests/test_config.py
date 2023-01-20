@@ -4,8 +4,7 @@ from log_analyzer import init_configuration, CONFIG
 
 
 class TestConfiguration(unittest.TestCase):
-    def setUp(self):
-        self.testdir = path.join(path.dirname(path.abspath(__file__)), "testdir")
+    testdir = path.join(path.dirname(path.abspath(__file__)), "testdir")
 
     def test_not_existing_file(self):
         self.assertEqual(
