@@ -240,7 +240,7 @@ def render_report(url_data, report_fname, report_size):
     try:
         with open(template_fname, "r", encoding="utf-8") as template:
             s = Template(template.read())
-            res = s.substitute(table_json=url_data[:report_size])
+            res = s.safe_substitute(table_json=url_data[:report_size])
             with open(report_fname, "wb", encoding="utf-8") as report:
                 report.write(res)
     except IOError:
